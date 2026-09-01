@@ -1,18 +1,18 @@
-# World Cup 2026 Match & Tournament Simulator
+# world cup 2026 match & tournament simulator
 
-A Streamlit football analytics app that predicts individual match outcomes and runs Monte Carlo tournament simulations.
+a streamlit football analytics app that predicts individual match outcomes and runs Monte Carlo tournament simulations
 
-## What It Does
+## what it does
 
-- Predicts win/draw/loss probabilities for any two teams.
-- Explains predictions using rating, ranking, form, attack, and defense factors.
-- Simulates group-stage matches.
-- Advances teams using the 2026-style format: top two in each group plus the best third-place teams.
-- Builds a seeded Round of 32 bracket from group-stage performance instead of randomly shuffling qualifiers.
-- Runs Monte Carlo simulations to estimate each team's chance of reaching each tournament stage.
-- Shows champion probabilities in an interactive Streamlit dashboard.
+- predicts win/draw/loss probabilities for any two teams.
+- explains predictions using rating, ranking, form, attack, and defense factors.
+- simulates group-stage matches.
+- advances teams using the 2026-style format: top two in each group plus the best third-place teams.
+- builds a seeded round of 32 bracket from group-stage performance instead of randomly shuffling qualifiers.
+- runs Monte Carlo simulations to estimate each team's chance of reaching each tournament stage.
+- shows champion probabilities in an interactive Streamlit dashboard.
 
-## Project Structure
+## project structure
 
 ```text
 app/
@@ -27,7 +27,7 @@ matches.csv
 requirements.txt
 ```
 
-## Run The App
+## run the app
 
 ```bash
 python3 -m venv .venv
@@ -36,9 +36,9 @@ pip install -r requirements.txt
 python3 -m streamlit run app/streamlit_app.py
 ```
 
-## Update The Data
+## update the data
 
-Download the latest international match results:
+download the latest international match results:
 
 ```bash
 python3 src/download_international_data.py
@@ -50,41 +50,19 @@ Build team ratings from completed matches:
 python3 src/build_team_ratings.py
 ```
 
-This creates `data/team_ratings.csv`, which the Streamlit app uses automatically. The generated ratings include an Elo-style rating, an Elo-derived ranking, recent form points, attack rating, defense rating, goals scored per match, and goals conceded per match.
+this creates `data/team_ratings.csv`, which the streamlit app uses automatically. The generated ratings include an Elo-style rating, an Elo-derived ranking, recent form points, attack rating, defense rating, goals scored per match, and goals conceded per match.
 
-Train the match prediction model:
+train the match prediction model:
 
 ```bash
 python3 src/train_model.py
 ```
 
-This creates `models/match_model.joblib` and `models/model_report.txt`. When the model file exists, `src/predictor.py` uses the selected trained model probabilities. If the model file is missing, it falls back to the simpler rating formula.
+this creates `models/match_model.joblib` and `models/model_report.txt`. when the model file exists, `src/predictor.py` uses the selected trained model probabilities. If the model file is missing, it falls back to the simpler rating formula.
 
-The training script also writes:
+the training script also writes:
 
 - `models/model_metrics.json` for dashboard metrics.
 - `models/calibration_curve.csv` for the reliability chart.
 - `models/feature_importance.csv` for model explainability.
-- Brier score, ranked probability score, and expected calibration error in the model report.
-
-## How To Make It Portfolio Worthy
-
-Replace `data/sample_team_ratings.csv` with a real dataset containing:
-
-- Team name
-- Group
-- Elo rating
-- FIFA ranking
-- Recent form points
-- Attack rating
-- Defense rating
-
-Then improve the prediction engine in `src/predictor.py` by replacing the current interpretable rating formula with a trained scikit-learn model. Keep the same output shape: team A win probability, draw probability, team B win probability, and explanation data.
-
-Good next upgrades:
-
-- Train on historical international matches.
-- Backtest on the 2014, 2018, and 2022 World Cups.
-- Add real fixtures and live result updates.
-- Add SHAP or permutation importance for stronger model explanations.
-- Save trained models in a `models/` folder with `joblib`.
+- brier score, ranked probability score, and expected calibration error in the model report.

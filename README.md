@@ -1,4 +1,4 @@
-# world cup 2026 match & tournament simulator
+# 26' world cup match & tournament simulator
 
 a streamlit football analytics app that predicts individual match outcomes and runs Monte Carlo tournament simulations
 

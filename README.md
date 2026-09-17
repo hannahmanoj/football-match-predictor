@@ -2,6 +2,8 @@
 
 a streamlit football analytics app that predicts individual match outcomes and runs Monte Carlo tournament simulations
 
+<img width="1512" height="779" alt="football1" src="https://github.com/user-attachments/assets/65ccb40e-30ba-45a4-b695-94c4cb3d5085" /><img width="1512" height="673" alt="football2" src="https://github.com/user-attachments/assets/672fd941-c8af-4f47-a4c5-e9d174d4de61" />
+
 ## what it does
 
 - predicts win/draw/loss probabilities for any two teams.

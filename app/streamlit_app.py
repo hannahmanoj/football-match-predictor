@@ -53,26 +53,56 @@ hero_background = image_data_uri(HERO_IMAGE_PATH) if HERO_IMAGE_PATH.exists() el
 st.markdown(
     """
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
+
         :root {
             --ink: #17201d;
             --muted: #5d6b65;
             --line: #dfe7e2;
             --surface: #ffffff;
             --surface-soft: #f6f9f7;
-            --green: #167a55;
-            --teal: #157b84;
-            --red: #b43d4a;
-            --gold: #b78020;
+            --green: #111111;
+            --teal: #111111;
+            --red: #111111;
+            --gold: #111111;
+        }
+
+        html, body, .stApp,
+        button, input, textarea, select,
+        p, label, table {
+            font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+        }
+
+        [data-testid="stIconMaterial"],
+        .material-symbols-rounded,
+        .material-symbols-outlined {
+            font-family: "Material Symbols Rounded", "Material Symbols Outlined" !important;
+            font-weight: normal !important;
+            font-style: normal !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+            white-space: nowrap !important;
+            word-wrap: normal !important;
+            direction: ltr !important;
+            -webkit-font-feature-settings: "liga" !important;
+            -webkit-font-smoothing: antialiased !important;
         }
 
         .stApp {
-            background:
-                linear-gradient(180deg, #f7faf8 0%, #eef5f1 42%, #f8faf8 100%);
+            background: #ffffff;
             color: var(--ink);
         }
 
+        header[data-testid="stHeader"] {
+            display: none;
+        }
+
+        div[data-testid="stToolbar"] {
+            display: none;
+        }
+
         .block-container {
-            padding-top: 1.4rem;
+            padding-top: 0;
             padding-bottom: 3rem;
             max-width: 1240px;
         }
@@ -85,12 +115,24 @@ st.markdown(
         div[data-testid="stTabs"] button {
             border-radius: 6px 6px 0 0;
             padding: 0.7rem 1rem;
-            font-weight: 650;
+            color: #111111 !important;
+            font-weight: 400;
+            opacity: 1;
+        }
+
+        div[data-testid="stTabs"] button p {
+            color: #111111 !important;
+            opacity: 1;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
-            color: var(--green);
-            border-bottom-color: var(--green);
+            color: #000000 !important;
+            font-weight: 700;
+            border-bottom-color: #000000;
+        }
+
+        div[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+            background-color: #000000;
         }
 
         div[data-testid="stMetric"] {
@@ -103,7 +145,7 @@ st.markdown(
 
         div[data-testid="stMetricLabel"] p {
             color: var(--muted);
-            font-weight: 650;
+            font-weight: 200;
         }
 
         div[data-testid="stDataFrame"] {
@@ -114,11 +156,11 @@ st.markdown(
         }
 
         .stButton > button {
-            border-radius: 8px;
+            border-radius: 2px;
             border: 1px solid var(--line);
             background: var(--surface);
             color: var(--ink);
-            font-weight: 800;
+            font-weight: 700;
             white-space: nowrap;
             box-shadow: 0 6px 16px rgba(21, 52, 39, 0.06);
             transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
@@ -131,15 +173,18 @@ st.markdown(
         }
 
         .app-header {
-            min-height: 390px;
+            width: min(96vw, 1800px);
+            min-height: 440px;
             background-image:
+                linear-gradient(180deg, rgba(8, 18, 14, 0.1), rgba(8, 18, 14, 0.58)),
                 url("__HERO_BACKGROUND__");
             background-size: cover;
-            background-position: center;
-            border-radius: 8px;
+            background-position: center top;
+            border-radius: 6px;
             padding: clamp(1.3rem, 4vw, 3rem);
             box-shadow: 0 18px 42px rgba(21, 52, 39, 0.18);
-            margin-bottom: 1.1rem;
+            margin: 0 0 1.1rem 50%;
+            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -147,12 +192,23 @@ st.markdown(
             overflow: hidden;
         }
 
+        .hero-kicker {
+            color: #ffffff;
+            font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+            font-size: clamp(1.2rem, 2vw, 1.2rem);
+            line-height: 1;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
         .app-header .app-title {
-            font-size: clamp(2rem, 3.35vw, 3.05rem);
-            line-height: 1.04;
-            font-weight: 800;
+            font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+            font-size: clamp(4.8rem, 10.5vw, 9rem);
+            line-height: 0.82;
+            font-weight: 600;
+            letter-spacing: -0.045em;
             margin: 0;
-            max-width: none;
             color: #ffffff !important;
             white-space: nowrap;
             text-shadow: 0 3px 22px rgba(0, 0, 0, 0.78);
@@ -160,14 +216,18 @@ st.markdown(
         }
 
         .app-subtitle {
-            color: var(--muted);
-            font-size: 1.02rem;
-            margin: 0;
-            max-width: 760px;
+            color: #ffffff;
+            font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+            font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+            line-height: 1.35;
+            font-weight: 600;
+            margin: 2.8rem auto 0;
+            max-width: 900px;
+            text-align: center;
         }
 
         .hero-copy {
-            max-width: 980px;
+            max-width: 1120px;
             background: transparent;
             border: 0;
             border-radius: 0;
@@ -186,16 +246,63 @@ st.markdown(
         }
 
         .summary-card {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.58);
+            position: relative;
+            background: #ffffff;
+            border: 1px solid var(--line);
             border-radius: 8px;
             padding: 0.85rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            backdrop-filter: blur(10px);
-            transition: transform 160ms ease, box-shadow 160ms ease;
+            box-shadow: none;
+            text-align: center;
         }
 
-        .summary-card:hover,
+        .summary-info {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 0.95rem;
+            height: 0.95rem;
+            margin-left: 0.35rem;
+            border: 1px solid var(--muted);
+            border-radius: 50%;
+            color: var(--muted);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 0.62rem;
+            line-height: 1;
+            vertical-align: middle;
+            cursor: help;
+        }
+
+        .summary-info::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            z-index: 20;
+            left: 50%;
+            bottom: calc(100% + 0.55rem);
+            width: max-content;
+            max-width: 230px;
+            padding: 0.5rem 0.65rem;
+            border-radius: 6px;
+            background: var(--ink);
+            color: #ffffff;
+            font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+            font-size: 0.72rem;
+            font-weight: 400;
+            line-height: 1.35;
+            text-align: center;
+            white-space: normal;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 0.25rem);
+            transition: opacity 120ms ease, transform 120ms ease;
+        }
+
+        .summary-info:hover::after,
+        .summary-info:focus::after {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
         .match-card:hover,
         .team-card:hover,
         .prob-card:hover {
@@ -210,16 +317,16 @@ st.markdown(
 
         .summary-label {
             color: var(--muted);
-            font-size: 0.78rem;
-            font-weight: 700;
+            font-size: 0.68rem;
+            font-weight: 600;
             text-transform: uppercase;
             margin-bottom: 0.28rem;
         }
 
         .summary-value {
             color: var(--ink);
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-size: 1.05rem;
+            font-weight: 600;
         }
 
         .prob-card {
@@ -239,7 +346,7 @@ st.markdown(
         }
 
         .prob-label {
-            font-weight: 750;
+            font-weight: 600;
             color: var(--ink);
             overflow-wrap: anywhere;
         }
@@ -257,7 +364,7 @@ st.markdown(
         }
 
         .prob-value {
-            font-weight: 800;
+            font-weight: 600;
             text-align: right;
             color: var(--ink);
         }
@@ -281,13 +388,13 @@ st.markdown(
 
         .today-title {
             font-size: 1.2rem;
-            font-weight: 800;
+            font-weight: 600;
             color: var(--ink);
         }
 
         .today-date {
             color: var(--muted);
-            font-weight: 650;
+            font-weight: 500;
         }
 
         .match-grid {
@@ -307,27 +414,27 @@ st.markdown(
         .match-meta {
             color: var(--muted);
             font-size: 0.82rem;
-            font-weight: 650;
+            font-weight: 500;
             margin-bottom: 0.45rem;
         }
 
         .match-teams {
             color: var(--ink);
             font-size: 1.05rem;
-            font-weight: 800;
+            font-weight: 600;
             margin-bottom: 0.45rem;
         }
 
         .match-pick {
             color: var(--green);
-            font-weight: 800;
+            font-weight: 600;
             margin-bottom: 0.45rem;
         }
 
         .mini-probs {
             color: var(--muted);
             font-size: 0.88rem;
-            font-weight: 650;
+            font-weight: 500;
         }
 
         .team-grid {
@@ -340,17 +447,43 @@ st.markdown(
         .team-card {
             background: var(--surface);
             border: 1px solid var(--line);
-            border-radius: 8px;
+            border-radius: 3px;
             padding: 1rem;
             box-shadow: 0 8px 22px rgba(21, 52, 39, 0.05);
+            text-align: center;
             transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        div[data-testid="stSelectbox"] label {
+            justify-content: center;
+            width: 100%;
+        }
+
+        div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+            background: #111111;
+            border-color: #111111;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        div[data-testid="stSelectbox"] [data-baseweb="select"] > div > div:first-child {
+            justify-content: center;
+        }
+
+        div[data-testid="stSelectbox"] [data-baseweb="select"] span,
+        div[data-testid="stSelectbox"] [data-baseweb="select"] input {
+            color: #ffffff !important;
+        }
+
+        div[data-testid="stSelectbox"] [data-baseweb="select"] svg {
+            fill: #ffffff;
         }
 
         .team-name {
             color: var(--ink);
-            font-size: 1.1rem;
-            font-weight: 850;
-            margin-bottom: 0.65rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
         }
 
         .flag {
@@ -368,21 +501,21 @@ st.markdown(
         .stat-box {
             background: var(--surface-soft);
             border: 1px solid var(--line);
-            border-radius: 7px;
+            border-radius: 3px;
             padding: 0.55rem;
         }
 
         .stat-label {
             color: var(--muted);
-            font-size: 0.7rem;
-            font-weight: 750;
+            font-size: 0.6rem;
+            font-weight: 400;
             text-transform: uppercase;
         }
 
         .stat-value {
             color: var(--ink);
-            font-size: 1rem;
-            font-weight: 850;
+            font-size: 0.85rem;
+            font-weight: 400;
         }
 
         .confidence-pill {
@@ -391,8 +524,204 @@ st.markdown(
             padding: 0.35rem 0.65rem;
             margin: 0.2rem 0 0.75rem 0;
             color: #ffffff;
-            font-weight: 800;
+            font-weight: 600;
             background: var(--teal);
+        }
+
+        .prediction-title {
+            margin: 1.25rem 0 0.45rem;
+            color: var(--ink);
+            font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .explanation-title {
+            margin: 1.25rem 0 0.65rem;
+            color: var(--ink);
+            font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .explanation-table {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            box-shadow: 0 8px 22px rgba(21, 52, 39, 0.05);
+            overflow: hidden;
+        }
+
+        .explanation-table th,
+        .explanation-table td {
+            padding: 0.65rem 0.8rem;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+            font-size: 0.85rem;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .explanation-table th {
+            background: var(--surface-soft);
+            color: var(--muted);
+        }
+
+        .explanation-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .prediction-summary {
+            margin: 0 0 1rem;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .tournament-summary {
+            max-width: 760px;
+            margin: 0 auto 1.1rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.65;
+            text-align: center;
+        }
+
+        .control-guide {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-guide-card {
+            padding: 0.85rem 0.9rem;
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 0;
+            text-align: center;
+        }
+
+        .control-guide-title {
+            margin-bottom: 0.3rem;
+            color: var(--ink);
+            font-size: 0.82rem;
+            font-weight: 400;
+        }
+
+        .control-guide-copy {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .performance-kpis {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .performance-kpi {
+            padding: 0.9rem;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 0;
+            text-align: center;
+        }
+
+        .performance-kpi-label {
+            color: var(--muted);
+            font-size: 0.68rem;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .performance-kpi-value {
+            margin: 0.3rem 0;
+            color: var(--ink);
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+
+        .performance-kpi-help {
+            color: var(--muted);
+            font-size: 0.68rem;
+            font-weight: 400;
+            line-height: 1.45;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .dataset-note {
+            max-width: 860px;
+            margin: 0 auto 1rem;
+            padding: 1rem 1.1rem;
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: 1.65;
+            text-align: center;
+        }
+
+        .dataset-note a {
+            color: var(--ink);
+            text-decoration: underline;
+        }
+
+        .prediction-kpis {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .prediction-kpi {
+            padding: 0.85rem 0.9rem;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 0;
+            box-shadow: 0 6px 18px rgba(21, 52, 39, 0.06);
+            text-align: center;
+        }
+
+        .prediction-kpi--winner {
+            background: #e4f7ec;
+            border: 2px solid #0aa96e;
+        }
+
+        .prediction-kpi-label {
+            min-height: 2.5rem;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .prediction-kpi-value {
+            margin-top: 0.25rem;
+            color: var(--ink);
+            font-size: 1.35rem;
+            font-weight: 400;
+            line-height: 1.25;
         }
 
         @media (max-width: 760px) {
@@ -401,13 +730,25 @@ st.markdown(
             }
 
             .app-header {
-                min-height: 470px;
-                background-position: center right;
+                width: calc(100vw - 1rem);
+                min-height: 420px;
+                background-position: center top;
             }
 
             .app-header .app-title {
-                font-size: 2rem;
-                white-space: normal;
+                font-size: clamp(3rem, 16vw, 4.6rem);
+                letter-spacing: -0.055em;
+            }
+
+            .hero-kicker {
+                font-size: 1.15rem;
+                margin-bottom: 1.1rem;
+            }
+
+            .app-subtitle {
+                font-size: 1rem;
+                line-height: 1.45;
+                margin-top: 1.8rem;
             }
 
             .prob-row {
@@ -417,6 +758,22 @@ st.markdown(
 
             .prob-value {
                 text-align: left;
+            }
+
+            .prediction-kpis {
+                grid-template-columns: 1fr;
+            }
+
+            .control-guide {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-kpis {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .prediction-kpi-label {
+                min-height: auto;
             }
 
             .today-header {
@@ -497,10 +854,48 @@ def metric_grid(items: list[tuple[str, str]]) -> None:
     st.markdown(metric_grid_html(items), unsafe_allow_html=True)
 
 
+def performance_metric_grid(items: list[tuple[str, str, str]]) -> None:
+    cards = "".join(
+        f'<div class="performance-kpi">'
+        f'<div class="performance-kpi-label">{escape(label)}</div>'
+        f'<div class="performance-kpi-value">{escape(value)}</div>'
+        f'<div class="performance-kpi-help">{escape(help_text)}</div>'
+        f'</div>'
+        for label, value, help_text in items
+    )
+    st.markdown(f'<div class="performance-kpis">{cards}</div>', unsafe_allow_html=True)
+
+
+def centered_table(frame: pd.DataFrame) -> None:
+    table = frame.to_html(index=False, classes="explanation-table", border=0, justify="center")
+    st.markdown(f'<div class="table-scroll">{table}</div>', unsafe_allow_html=True)
+
+
+KPI_DESCRIPTIONS = {
+    "Teams": "Number of national teams included in the tournament simulation.",
+    "Groups": "Number of groups used in the tournament group stage.",
+    "Model": "Machine-learning model currently used to calculate match probabilities.",
+    "Accuracy": "Share of test matches for which the model predicted the correct result.",
+    "Top Champion": "Team with the highest simulated probability of winning the tournament.",
+    "Title Chance": "Estimated probability that the leading team wins the tournament.",
+    "Simulations": "Number of complete tournament runs used for the estimate.",
+    "Seed": "The simulation's replay code. Reusing it recreates the same set of results.",
+    "Log Loss": "Prediction error that penalizes confident incorrect probabilities; lower is better.",
+    "Brier": "Mean squared error of predicted probabilities; lower is better.",
+    "RPS": "Ranked Probability Score across win, draw, and loss outcomes; lower is better.",
+    "ECE": "Expected Calibration Error between predicted confidence and observed results; lower is better.",
+    "Training Rows": "Historical matches used to train the selected model.",
+    "Test Rows": "Held-out historical matches used to evaluate the model.",
+}
+
+
 def metric_grid_html(items: list[tuple[str, str]]) -> str:
     cards = "".join(
         f'<div class="summary-card">'
-        f'<div class="summary-label">{label}</div>'
+        f'<div class="summary-label">{label}'
+        f'<span class="summary-info" tabindex="0" role="img" aria-label="{escape(KPI_DESCRIPTIONS.get(label, label))}" '
+        f'data-tooltip="{escape(KPI_DESCRIPTIONS.get(label, label))}">i</span>'
+        f'</div>'
         f'<div class="summary-value">{value}</div>'
         f'</div>'
         for label, value in items
@@ -636,13 +1031,6 @@ def team_snapshot(teams: pd.DataFrame, team_a: str, team_b: str) -> None:
     st.markdown(f'<div class="team-grid">{team_card(a)}{team_card(b)}</div>', unsafe_allow_html=True)
 
 
-def swap_selected_teams() -> None:
-    team_a = st.session_state.get("team_a_select")
-    team_b = st.session_state.get("team_b_select")
-    st.session_state["team_a_select"] = team_b
-    st.session_state["team_b_select"] = team_a
-
-
 def todays_match_rows(prediction_teams: pd.DataFrame, matches: pd.DataFrame) -> tuple[pd.DataFrame, date | None]:
     if matches.empty:
         return pd.DataFrame(), None
@@ -758,18 +1146,21 @@ team_names = teams["team"].tolist()
 
 metrics = get_model_metrics()
 selected_model = metrics.get("selected_model", "Formula fallback")
-accuracy_label = f"{metrics['accuracy']:.3f}" if metrics else "N/A"
+accuracy_label = f"{metrics['accuracy']:.1%}" if metrics else "N/A"
 
 st.markdown(
     '<section class="app-header">'
     '<div class="hero-copy">'
-    '<div class="app-title">World Cup 2026 Match & Tournament Simulator</div>'
+    '<div>'
+    '<div class="hero-kicker">🏆</div>'
+    '<div class="hero-kicker">World Cup 2026</div>'
+    '<div class="app-title">PREDICTOR</div>'
+    '<div class="app-subtitle">a streamlit app to predict individual match outcomes and runs Monte Carlo tournament simulations</div>'
+    '</div>'
     '</div>'
     '</section>',
     unsafe_allow_html=True,
 )
-
-st.caption("Machine-learning match probabilities, calibrated model diagnostics, and seeded Monte Carlo tournament paths.")
 metric_grid(
     [
         ("Teams", f"{len(teams):,}"),
@@ -781,23 +1172,19 @@ metric_grid(
 
 todays_matches_panel(prediction_teams)
 
-tab_match, tab_tournament, tab_performance, tab_data = st.tabs(
-    ["Match Predictor", "Tournament Simulator", "Model Performance", "Team Data"]
+tab_match, tab_tournament, tab_performance = st.tabs(
+    ["Match Predictor", "Monte Carlo Tournament Simulator", "Model Performance"]
 )
 
 with tab_match:
-    st.subheader("Match Predictor")
     if "team_a_select" not in st.session_state:
         st.session_state["team_a_select"] = team_names[0]
     if "team_b_select" not in st.session_state:
         st.session_state["team_b_select"] = team_names[1 if len(team_names) > 1 else 0]
 
-    left, middle, right = st.columns([1, 0.24, 1])
+    left, right = st.columns(2)
     with left:
         team_a = st.selectbox("Team A", team_names, key="team_a_select", format_func=team_label)
-    with middle:
-        st.write("")
-        st.button("Swap", use_container_width=True, on_click=swap_selected_teams)
     with right:
         team_b = st.selectbox("Team B", team_names, key="team_b_select", format_func=team_label)
 
@@ -812,46 +1199,72 @@ with tab_match:
             f"{team_label(team_b)} win": prediction.team_b_win,
         }
         favorite, favorite_probability = max(outcomes.items(), key=lambda item: item[1])
-        confidence, confidence_color = confidence_text(favorite_probability)
-        probs = pd.DataFrame(
-            {
-                "Outcome": [f"{team_a} win", "Draw", f"{team_b} win"],
-                "Probability": [prediction.team_a_win, prediction.draw, prediction.team_b_win],
-            }
-        )
+        confidence, _ = confidence_text(favorite_probability)
+        team_a_highlight = " prediction-kpi--winner" if prediction.team_a_win >= prediction.team_b_win else ""
+        team_b_highlight = " prediction-kpi--winner" if prediction.team_b_win > prediction.team_a_win else ""
 
-        st.subheader("Prediction")
         st.markdown(
-            f'<span class="confidence-pill" style="background: {confidence_color};">{confidence}: {favorite} ({favorite_probability:.1%})</span>',
+            f'<div class="prediction-title">Prediction</div>'
+            f'<div class="prediction-summary">{confidence}: {favorite} ({favorite_probability:.1%})</div>'
+            f'<div class="prediction-kpis">'
+            f'<div class="prediction-kpi{team_a_highlight}"><div class="prediction-kpi-label">{team_label(team_a)} win</div>'
+            f'<div class="prediction-kpi-value">{prediction.team_a_win:.1%}</div></div>'
+            f'<div class="prediction-kpi"><div class="prediction-kpi-label">Draw</div>'
+            f'<div class="prediction-kpi-value">{prediction.draw:.1%}</div></div>'
+            f'<div class="prediction-kpi{team_b_highlight}"><div class="prediction-kpi-label">{team_label(team_b)} win</div>'
+            f'<div class="prediction-kpi-value">{prediction.team_b_win:.1%}</div></div>'
+            f'</div>',
             unsafe_allow_html=True,
         )
-        probability_panel(
-            [
-                (f"{team_label(team_a)} win", prediction.team_a_win, "var(--green)"),
-                ("Draw", prediction.draw, "var(--gold)"),
-                (f"{team_label(team_b)} win", prediction.team_b_win, "var(--red)"),
-            ]
-        )
 
-        c1, c2, c3 = st.columns(3)
-        c1.metric(f"{team_label(team_a)} win", f"{prediction.team_a_win:.1%}")
-        c2.metric("Draw", f"{prediction.draw:.1%}")
-        c3.metric(f"{team_label(team_b)} win", f"{prediction.team_b_win:.1%}")
-
-        st.subheader("Why the model thinks this")
+        st.markdown('<div class="explanation-title">Why the model thinks this</div>', unsafe_allow_html=True)
         explanation = prediction.explanation.copy()
         explanation["impact"] = explanation["impact"].map(lambda value: f"{value:+.2f}")
-        st.dataframe(explanation, use_container_width=True, hide_index=True)
+        st.markdown(
+            explanation.to_html(index=False, classes="explanation-table", border=0, justify="center"),
+            unsafe_allow_html=True,
+        )
 
 with tab_tournament:
-    st.subheader("Monte Carlo Tournament Simulation")
+    st.markdown(
+        '<div class="prediction-title">Monte Carlo Tournament Simulator</div>'
+        '<div class="tournament-summary">'
+        'This simulator plays the entire World Cup many times using each team’s match probabilities. '
+        'The results show how often every team reaches each stage. More simulations give steadier estimates.'
+        '</div>'
+        '<div class="control-guide">'
+        '<div class="control-guide-card"><div class="control-guide-title">1. Choose simulations</div>'
+        '<div class="control-guide-copy">Enter how many complete World Cups to test. For example, 1,000 means the simulator plays the tournament 1,000 times. Start with 100 for speed.</div></div>'
+        '<div class="control-guide-card"><div class="control-guide-title">2. Choose a random seed</div>'
+        '<div class="control-guide-copy">A random seed is a replay code for the simulation. The same seed gives the same results; changing it creates a new set of possible results. It does not make a team stronger.</div></div>'
+        '<div class="control-guide-card"><div class="control-guide-title">3. Choose a stage</div>'
+        '<div class="control-guide-copy">Choose the milestone to compare, such as reaching the final or winning the World Cup. A 25% result means the team achieved it in about 25 of every 100 runs.</div></div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
     col_a, col_b, col_c = st.columns([1, 1, 1])
-    simulations = col_a.slider("Simulations", min_value=100, max_value=2000, value=100, step=100)
-    seed = col_b.number_input("Random seed", min_value=1, max_value=999999, value=42, step=1)
+    simulations = col_a.number_input(
+        "Number of simulations",
+        min_value=100,
+        max_value=2000,
+        value=100,
+        step=100,
+        help="The number of complete tournament runs. Higher values are steadier but take longer.",
+    )
+    seed = col_b.number_input(
+        "Random seed",
+        min_value=1,
+        max_value=999999,
+        value=42,
+        step=1,
+        help="Think of this as a replay code. The same number recreates the same simulation; another number creates a fresh one.",
+    )
     stage_to_chart = col_c.selectbox(
-        "Chart stage",
+        "Result to explore",
         ["champion", "final", "semifinal", "quarterfinal", "round_of_16", "round_of_32"],
-        format_func=lambda value: value.replace("_", " ").title(),
+        format_func=lambda value: "Win the World Cup" if value == "champion" else f"Reach the {value.replace('_', ' ').title()}",
+        help="Choose the tournament milestone shown in the comparison chart.",
     )
 
     results = run_simulations(simulations, seed)
@@ -866,30 +1279,76 @@ with tab_tournament:
         ]
     )
 
-    st.dataframe(
-        results.assign(
-            round_of_32=lambda df: df["round_of_32"].map("{:.1%}".format),
-            round_of_16=lambda df: df["round_of_16"].map("{:.1%}".format),
-            quarterfinal=lambda df: df["quarterfinal"].map("{:.1%}".format),
-            semifinal=lambda df: df["semifinal"].map("{:.1%}".format),
-            final=lambda df: df["final"].map("{:.1%}".format),
-            champion=lambda df: df["champion"].map("{:.1%}".format),
-        ),
-        use_container_width=True,
-        hide_index=True,
+    if stage_to_chart == "champion":
+        chart_title = "Chance of Winning the World Cup"
+        chart_description = (
+            "This graph compares how often each team won the World Cup across all the simulated tournaments. "
+            "A taller bar means the team won more often."
+        )
+    else:
+        stage_name = stage_to_chart.replace("_", " ").title()
+        chart_title = f"Chance of Reaching the {stage_name}"
+        chart_description = (
+            f"This graph compares how often each team reached the {stage_name} across all the simulated tournaments. "
+            "A taller bar means the team reached this stage more often."
+        )
+    st.markdown(
+        f'<div class="prediction-title">{chart_title}</div>'
+        f'<div class="tournament-summary">{chart_description}</div>',
+        unsafe_allow_html=True,
     )
-
-    top_n = st.slider("Teams shown in chart", min_value=6, max_value=24, value=12, step=2)
+    _, chart_control, _ = st.columns([1.4, 1, 1.4])
+    top_n = chart_control.number_input(
+        "Teams to show",
+        min_value=6,
+        max_value=24,
+        value=12,
+        step=2,
+        help="This changes only how many teams appear in the chart, not the simulation results.",
+    )
     top_chances = results.sort_values(stage_to_chart, ascending=False).head(top_n)[["team", stage_to_chart]].copy()
     top_chances["team"] = top_chances["team"].map(team_label)
-    st.subheader(stage_to_chart.replace("_", " ").title())
     st.bar_chart(top_chances, x="team", y=stage_to_chart, height=360)
 
-    with st.expander("Example simulated group table"):
-        example_standings = simulate_group_stage(teams, np.random.default_rng(seed))
-        st.dataframe(example_standings, use_container_width=True, hide_index=True)
+    tournament_table = results.assign(
+        team=lambda df: df["team"].map(team_label),
+        round_of_32=lambda df: df["round_of_32"].map("{:.1%}".format),
+        round_of_16=lambda df: df["round_of_16"].map("{:.1%}".format),
+        quarterfinal=lambda df: df["quarterfinal"].map("{:.1%}".format),
+        semifinal=lambda df: df["semifinal"].map("{:.1%}".format),
+        final=lambda df: df["final"].map("{:.1%}".format),
+        champion=lambda df: df["champion"].map("{:.1%}".format),
+    ).rename(
+        columns={
+            "team": "Team",
+            "round_of_32": "Reach Round of 32",
+            "round_of_16": "Reach Round of 16",
+            "quarterfinal": "Reach Quarter-final",
+            "semifinal": "Reach Semi-final",
+            "final": "Reach Final",
+            "champion": "Win World Cup",
+        }
+    )
+    centered_table(tournament_table)
 
-    with st.expander("Example Round of 32 bracket"):
+    with st.expander("One example: group-stage standings"):
+        st.markdown(
+            '<div class="tournament-summary">This is one possible version of the group stage from the selected random seed. '
+            'It shows how the teams could finish in their groups. It is an example, not the average prediction.</div>',
+            unsafe_allow_html=True,
+        )
+        example_standings = simulate_group_stage(teams, np.random.default_rng(seed))
+        st.markdown(
+            example_standings.to_html(index=False, classes="explanation-table", border=0, justify="center"),
+            unsafe_allow_html=True,
+        )
+
+    with st.expander("One example: Round of 32 matches"):
+        st.markdown(
+            '<div class="tournament-summary">These are the first knockout matches created from the example group standings above. '
+            'The teams change when the random seed changes.</div>',
+            unsafe_allow_html=True,
+        )
         example_qualifiers = qualified_teams(example_standings)
         bracket = build_round_of_32(example_qualifiers)
         pairings = pd.DataFrame(
@@ -898,7 +1357,11 @@ with tab_tournament:
                 for index in range(0, len(bracket), 2)
             ]
         )
-        st.dataframe(pairings, use_container_width=True, hide_index=True)
+        pairings = pairings.rename(columns={"match": "Match", "team_a": "Team A", "team_b": "Team B"})
+        st.markdown(
+            pairings.to_html(index=False, classes="explanation-table", border=0, justify="center"),
+            unsafe_allow_html=True,
+        )
 
 with tab_performance:
     metrics = get_model_metrics()
@@ -909,42 +1372,77 @@ with tab_performance:
     if not metrics:
         st.warning("Train the model with `python3 src/train_model.py` to generate performance metrics.")
     else:
-        st.subheader("Selected Model")
-        metric_grid(
+        st.markdown(
+            '<div class="prediction-title">Model Performance</div>'
+            '<div class="tournament-summary">These results show how well the prediction model performed on matches it had not seen before. '
+            'Higher accuracy is better; lower error scores are better.</div>',
+            unsafe_allow_html=True,
+        )
+        performance_metric_grid(
             [
-                ("Model", metrics["selected_model"]),
-                ("Accuracy", f"{metrics['accuracy']:.3f}"),
-                ("Log Loss", f"{metrics['log_loss']:.3f}"),
-                ("Brier", f"{metrics['brier_score']:.3f}"),
+                ("Model", str(metrics["selected_model"]), "The prediction method that performed best during testing."),
+                ("Accuracy", f"{metrics['accuracy']:.1%}", "The share of test matches where the correct result was picked. Higher is better."),
+                ("Log Loss", f"{metrics['log_loss']:.3f}", "An error score that strongly punishes confident mistakes. Lower is better."),
+                ("Brier Score", f"{metrics['brier_score']:.3f}", "How close the predicted chances were to what happened. Lower is better."),
             ]
         )
-        metric_grid(
+        performance_metric_grid(
             [
-                ("RPS", f"{metrics['ranked_probability_score']:.3f}"),
-                ("ECE", f"{metrics['expected_calibration_error']:.2%}"),
-                ("Training Rows", f"{metrics['training_rows']:,}"),
-                ("Test Rows", f"{metrics['test_rows']:,}"),
+                ("RPS", f"{metrics['ranked_probability_score']:.3f}", "An overall error score for win, draw, and loss chances. Lower is better."),
+                ("Confidence Gap", f"{metrics['expected_calibration_error']:.2%}", "The gap between the model’s confidence and real results. Smaller is better."),
+                ("Training Matches", f"{metrics['training_rows']:,}", "Past matches the model used to learn patterns."),
+                ("Test Matches", f"{metrics['test_rows']:,}", "Separate matches used to check the model fairly after training."),
             ]
+        )
+
+        st.markdown(
+            '<div class="prediction-title">Dataset Used</div>'
+            '<div class="dataset-note">'
+            'The project uses the <a href="https://www.kaggle.com/datasets/martj42/international-football-results-from-1872-to-2017" target="_blank">'
+            'International Football Results dataset by Mart Jürisoo on Kaggle</a>. It contains men’s international match results, '
+            'including the teams, score, date, competition, location, and whether the match was played at a neutral venue. '
+            'The model learns from completed matches dated 1990 onward. Matches from 2022 onward are kept separate to test it on newer games it did not train on. '
+            'Elo, form, attack, and defence ratings are calculated from these match results rather than copied from a separate ratings dataset.'
+            '</div>',
+            unsafe_allow_html=True,
         )
 
         comparison = pd.DataFrame(metrics["model_comparison"])
-        st.subheader("Model Comparison")
-        st.dataframe(
-            comparison.assign(
-                accuracy=lambda df: df["accuracy"].map("{:.3f}".format),
-                log_loss=lambda df: df["log_loss"].map("{:.3f}".format),
-                brier_score=lambda df: df["brier_score"].map("{:.3f}".format),
-                rps=lambda df: df["rps"].map("{:.3f}".format),
-                ece=lambda df: df["ece"].map("{:.2%}".format),
-                draw_precision=lambda df: df["draw_precision"].map("{:.3f}".format),
-                draw_recall=lambda df: df["draw_recall"].map("{:.3f}".format),
-            ),
-            use_container_width=True,
-            hide_index=True,
+        st.markdown(
+            '<div class="prediction-title">Model Comparison</div>'
+            '<div class="tournament-summary">This table compares the models that were tested. '
+            'Look for higher accuracy and lower Log Loss, Brier Score, RPS, and Confidence Gap.</div>',
+            unsafe_allow_html=True,
         )
+        comparison_table = comparison.assign(
+            accuracy=lambda df: df["accuracy"].map("{:.1%}".format),
+            log_loss=lambda df: df["log_loss"].map("{:.3f}".format),
+            brier_score=lambda df: df["brier_score"].map("{:.3f}".format),
+            rps=lambda df: df["rps"].map("{:.3f}".format),
+            ece=lambda df: df["ece"].map("{:.2%}".format),
+            draw_precision=lambda df: df["draw_precision"].map("{:.1%}".format),
+            draw_recall=lambda df: df["draw_recall"].map("{:.1%}".format),
+        ).rename(
+            columns={
+                "model": "Model",
+                "accuracy": "Accuracy",
+                "log_loss": "Log Loss",
+                "brier_score": "Brier Score",
+                "rps": "RPS",
+                "ece": "Confidence Gap",
+                "draw_precision": "Draw Precision",
+                "draw_recall": "Draw Recall",
+            }
+        )
+        centered_table(comparison_table)
 
         if not calibration.empty:
-            st.subheader("Calibration Curve")
+            st.markdown(
+                '<div class="prediction-title">Predicted Chances Compared with Real Results</div>'
+                '<div class="tournament-summary">This graph checks whether the model’s confidence matches reality. '
+                'When the predicted and actual lines stay close together, the probabilities are trustworthy.</div>',
+                unsafe_allow_html=True,
+            )
             chart_data = calibration[
                 ["mean_predicted_probability", "actual_rate"]
             ].rename(
@@ -954,35 +1452,44 @@ with tab_performance:
                 }
             )
             st.line_chart(chart_data, height=320)
-            st.dataframe(
-                calibration.assign(
-                    mean_predicted_probability=lambda df: df["mean_predicted_probability"].map("{:.2%}".format),
-                    actual_rate=lambda df: df["actual_rate"].map("{:.2%}".format),
-                ),
-                use_container_width=True,
-                hide_index=True,
+            calibration_table = calibration.assign(
+                mean_predicted_probability=lambda df: df["mean_predicted_probability"].map("{:.2%}".format),
+                actual_rate=lambda df: df["actual_rate"].map("{:.2%}".format),
+            ).rename(
+                columns={
+                    "mean_predicted_probability": "Predicted Chance",
+                    "actual_rate": "What Actually Happened",
+                    "count": "Matches in This Group",
+                }
             )
+            centered_table(calibration_table)
 
         if not feature_importance.empty:
-            st.subheader("Feature Importance")
-            top_features = feature_importance.head(15)
-            st.bar_chart(top_features, x="feature", y="importance_mean", height=360)
-            st.dataframe(
-                top_features.assign(
-                    importance_mean=lambda df: df["importance_mean"].map("{:.5f}".format),
-                    importance_std=lambda df: df["importance_std"].map("{:.5f}".format),
-                ),
-                use_container_width=True,
-                hide_index=True,
+            st.markdown(
+                '<div class="prediction-title">What Influences the Predictions</div>'
+                '<div class="tournament-summary">This graph shows which pieces of team information affect the model most. '
+                'A longer bar means the model relies more on that factor; it does not mean the factor helps a team win.</div>',
+                unsafe_allow_html=True,
             )
+            top_features = feature_importance.head(15).copy()
+            top_features["feature"] = top_features["feature"].map(lambda value: value.replace("_", " ").title())
+            st.bar_chart(top_features, x="feature", y="importance_mean", height=360)
+            feature_table = top_features.assign(
+                importance_mean=lambda df: df["importance_mean"].map("{:.5f}".format),
+                importance_std=lambda df: df["importance_std"].map("{:.5f}".format),
+            ).rename(
+                columns={
+                    "feature": "Team Information",
+                    "importance_mean": "Average Influence",
+                    "importance_std": "How Much It Varies",
+                }
+            )
+            centered_table(feature_table)
 
-        with st.expander("Full model report"):
+        with st.expander("Technical details for advanced users"):
+            st.markdown(
+                '<div class="tournament-summary">This is the full technical training report. '
+                'Most users can rely on the simpler summaries above.</div>',
+                unsafe_allow_html=True,
+            )
             st.code(report)
-
-with tab_data:
-    st.subheader("Editable Team Ratings")
-    st.dataframe(teams, use_container_width=True, hide_index=True)
-    st.markdown(
-        "Run `python3 src/build_team_ratings.py` after updating `data/international_matches.csv`. "
-        "Edit `data/sample_team_ratings.csv` only when you want to change the tournament teams or groups."
-    )
